@@ -19,8 +19,6 @@ public class Code07_MaxPointsOneLine {
 			y = b;
 		}
 	}
-	
-	//  public static int maxPoints(int[] x, int[] y)//  x[i],y[i]
 
 	public static int maxPoints(Point[] points) {
 		if (points == null) {
@@ -29,28 +27,14 @@ public class Code07_MaxPointsOneLine {
 		if (points.length <= 2) {
 			return points.length;
 		}
-		// Map<String, Integer>
-		// key:  3   ->  ( 5  ,  6   )
-		// key:          ( 7,  4    )
-		// key:          ( 11,  8    )
-		//  3/5    6
-		//  3/7    4
-		//  3/11   8
-		Map<Integer, Map<Integer, Integer>> map 
-		
-		= 
-			new HashMap<Integer, Map<Integer, Integer>>();
-		
-		
-		
+		Map<Integer, Map<Integer, Integer>> map = new HashMap<Integer, Map<Integer, Integer>>();
 		int result = 0;
-		for (int i = 0; i < points.length; i++) { // 直线必须从i号点出发，考察i后面的点和i的关系
+		for (int i = 0; i < points.length; i++) {
 			map.clear();
 			int samePosition = 1;
 			int sameX = 0;
 			int sameY = 0;
 			int line = 0;
-			// i(固定) .......
 			for (int j = i + 1; j < points.length; j++) {
 				int x = points[j].x - points[i].x;
 				int y = points[j].y - points[i].y;
@@ -60,7 +44,7 @@ public class Code07_MaxPointsOneLine {
 					sameX++;
 				} else if (y == 0) {
 					sameY++;
-				} else {  // 有斜率
+				} else {
 					int gcd = gcd(x, y);
 					x /= gcd;
 					y /= gcd;
@@ -70,19 +54,16 @@ public class Code07_MaxPointsOneLine {
 					if (!map.get(x).containsKey(y)) {
 						map.get(x).put(y, 0);
 					}
-					// x/y
 					map.get(x).put(y, map.get(x).get(y) + 1);
 					line = Math.max(line, map.get(x).get(y));
 				}
 			}
-			result = Math.max(result, 
-					          Math.max(Math.max(sameX, sameY), line) + samePosition);
+			result = Math.max(result, Math.max(Math.max(sameX, sameY), line) + samePosition);
 		}
 		return result;
 	}
 
 	// 保证初始调用的时候，a和b不等于0
-	// O(1)
 	public static int gcd(int a, int b) {
 		return b == 0 ? a : gcd(b, a % b);
 	}
