@@ -2,7 +2,7 @@ package class05;
 
 import java.util.HashMap;
 
-public class Code06_LeastRecentlyUsedCache {
+public class Code04_LeastRecentlyUsedCache {
 
 	// 
 	public static class Node<K, V> {

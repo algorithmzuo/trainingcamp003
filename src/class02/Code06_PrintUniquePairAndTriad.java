@@ -1,6 +1,6 @@
 package class02;
 
-public class Code07_PrintUniquePairAndTriad {
+public class Code06_PrintUniquePairAndTriad {
 
 	public static void printUniquePair(int[] arr, int k) {
 		if (arr == null || arr.length < 2) {

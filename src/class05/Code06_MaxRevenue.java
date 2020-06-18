@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-public class Code04_MaxRevenue {
+public class Code06_MaxRevenue {
 
 	// 请保证只有唯一的最后节点, 没有环
 	// dependents[i][j] == 0 认为i项目和j项目没关系，不直接相连

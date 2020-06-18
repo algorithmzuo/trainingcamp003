@@ -10,8 +10,8 @@ public class Code05_LongestIntegratedLength {
 			return 0;
 		}
 		int len = 0;
-		 // O(N^3   * log N)
-		for (int start = 0; start < arr.length; start++) {  // 子数组所有可能的开头
+		// O(N^3 * log N)
+		for (int start = 0; start < arr.length; start++) { // 子数组所有可能的开头
 			for (int end = start; end < arr.length; end++) { // 开头为start的情况下，所有可能的结尾
 				// arr[s ... e]
 				// O(N * logN)
@@ -46,8 +46,8 @@ public class Code05_LongestIntegratedLength {
 			set.clear();
 			max = Integer.MIN_VALUE;
 			min = Integer.MAX_VALUE;
-			for (int R = L; R < arr.length; R++) { //  R 右边界
-				//  arr[L..R]这个子数组在验证
+			for (int R = L; R < arr.length; R++) { // R 右边界
+				// arr[L..R]这个子数组在验证
 				if (set.contains(arr[R])) {
 					// arr[L..R]上开始 出现重复值了，arr[L..R往后]不需要验证了，
 					// 一定不是可整合的
