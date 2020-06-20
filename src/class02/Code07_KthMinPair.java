@@ -25,7 +25,7 @@ public class Code07_KthMinPair {
 	}
 
 	// O(N^2 * log (N^2))的复杂度，你肯定过不了
-	// 返回的int[]  长度是2，{3,1}  int[2] = [3,1]
+	// 返回的int[] 长度是2，{3,1} int[2] = [3,1]
 	public static int[] kthMinPair1(int[] arr, int k) {
 		int N = arr.length;
 		if (k > N * N) {
@@ -49,8 +49,8 @@ public class Code07_KthMinPair {
 			return null;
 		}
 		// O(N*logN)
-		Arrays.sort(arr);	
-		// 第K小的数值对，第一维数字，是什么   是arr中
+		Arrays.sort(arr);
+		// 第K小的数值对，第一维数字，是什么 是arr中
 		int fristNum = arr[(k - 1) / N];
 		int lessFristNumSize = 0;// 数出比fristNum小的数有几个
 		int fristNumSize = 0; // 数出==fristNum的数有几个
@@ -74,7 +74,7 @@ public class Code07_KthMinPair {
 		}
 		// 在无序数组中，找到第K小的数，返回值
 		// 第K小，以1作为开始
-		int fristNum = getMinKthByBFPRT(arr, ((k - 1) / N) + 1);
+		int fristNum = getMinKth(arr, (k - 1) / N);
 		int lessFristNumSize = 0;
 		int fristNumSize = 0;
 		for (int i = 0; i < N; i++) {
@@ -86,85 +86,49 @@ public class Code07_KthMinPair {
 			}
 		}
 		int rest = k - (lessFristNumSize * N);
-		return new int[] { fristNum, getMinKthByBFPRT(arr, ((rest - 1) / fristNumSize) + 1) };
+		return new int[] { fristNum, getMinKth(arr, (rest - 1) / fristNumSize) };
 	}
 
-	// 利用bfprt算法求解，是O(N)的过程
-	// 在arr上，找到第K小的数，并返回。K范围是[1,N]，范围不是[0,N-1]
-	// 对你来讲，它可能永远不会被你想起，但确实本题最优解的算法原型
-	public static int getMinKthByBFPRT(int[] arr, int K) {
-		return select(arr, 0, arr.length - 1, K - 1);
-	}
-
-	public static int select(int[] arr, int begin, int end, int i) {
-		if (begin == end) {
-			return arr[begin];
+	// 改写快排，时间复杂度O(N)
+	public static int getMinKth(int[] arr, int index) {
+		int L = 0;
+		int R = arr.length - 1;
+		int pivot = 0;
+		int[] range = null;
+		while (L < R) {
+			pivot = arr[L + (int) (Math.random() * (R - L + 1))];
+			range = partition(arr, L, R, pivot);
+			if (index < range[0]) {
+				R = range[0] - 1;
+			} else if (index > range[1]) {
+				L = range[1] + 1;
+			} else {
+				return pivot;
+			}
 		}
-		int pivot = medianOfMedians(arr, begin, end);
-		int[] pivotRange = partition(arr, begin, end, pivot);
-		if (i >= pivotRange[0] && i <= pivotRange[1]) {
-			return arr[i];
-		} else if (i < pivotRange[0]) {
-			return select(arr, begin, pivotRange[0] - 1, i);
-		} else {
-			return select(arr, pivotRange[1] + 1, end, i);
-		}
+		return arr[L];
 	}
 
-	public static int medianOfMedians(int[] arr, int begin, int end) {
-		int num = end - begin + 1;
-		int offset = num % 5 == 0 ? 0 : 1;
-		int[] mArr = new int[num / 5 + offset];
-		for (int i = 0; i < mArr.length; i++) {
-			int beginI = begin + i * 5;
-			int endI = beginI + 4;
-			mArr[i] = getMedian(arr, beginI, Math.min(end, endI));
-		}
-		return select(mArr, 0, mArr.length - 1, mArr.length / 2);
-	}
-
-	public static int[] partition(int[] arr, int begin, int end, int pivotValue) {
-		int small = begin - 1;
-		int cur = begin;
-		int big = end + 1;
-		while (cur != big) {
-			if (arr[cur] < pivotValue) {
-				swap(arr, ++small, cur++);
-			} else if (arr[cur] > pivotValue) {
-				swap(arr, cur, --big);
+	public static int[] partition(int[] arr, int L, int R, int pivot) {
+		int less = L - 1;
+		int more = R + 1;
+		int cur = L;
+		while (cur < more) {
+			if (arr[cur] < pivot) {
+				swap(arr, ++less, cur++);
+			} else if (arr[cur] > pivot) {
+				swap(arr, cur, --more);
 			} else {
 				cur++;
 			}
 		}
-		int[] range = new int[2];
-		range[0] = small + 1;
-		range[1] = big - 1;
-		return range;
+		return new int[] { less + 1, more - 1 };
 	}
 
-	public static int getMedian(int[] arr, int begin, int end) {
-		insertionSort(arr, begin, end);
-		int sum = end + begin;
-		int mid = (sum / 2) + (sum % 2);
-		return arr[mid];
-	}
-
-	public static void insertionSort(int[] arr, int begin, int end) {
-		for (int i = begin + 1; i != end + 1; i++) {
-			for (int j = i; j != begin; j--) {
-				if (arr[j - 1] > arr[j]) {
-					swap(arr, j - 1, j);
-				} else {
-					break;
-				}
-			}
-		}
-	}
-
-	public static void swap(int[] arr, int index1, int index2) {
-		int tmp = arr[index1];
-		arr[index1] = arr[index2];
-		arr[index2] = tmp;
+	public static void swap(int[] arr, int i, int j) {
+		int tmp = arr[i];
+		arr[i] = arr[j];
+		arr[j] = tmp;
 	}
 
 	// 为了测试，生成值也随机，长度也随机的随机数组
@@ -193,7 +157,7 @@ public class Code07_KthMinPair {
 		int max = 100;
 		int len = 30;
 		int testTimes = 100000;
-		System.out.println("test bagin, time times : " + testTimes);
+		System.out.println("test bagin, test times : " + testTimes);
 		for (int i = 0; i < testTimes; i++) {
 			int[] arr = getRandomArray(max, len);
 			int[] arr1 = copyArray(arr);

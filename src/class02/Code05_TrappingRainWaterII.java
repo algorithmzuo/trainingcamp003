@@ -38,8 +38,6 @@ public class Code05_TrappingRainWaterII {
 		boolean[][] isEnter = new boolean[N][M];
 		// 小根堆
 		PriorityQueue<Node> heap = new PriorityQueue<>(new NodeComparator());
-		
-		
 		for (int col = 0; col < M - 1; col++) {
 			isEnter[0][col] = true;
 			heap.add(new Node(heightMap[0][col], 0, col));
