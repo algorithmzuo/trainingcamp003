@@ -56,6 +56,8 @@ public class Code05_TrappingRainWaterII {
 		}
 		
 		
+		
+		
 		int water = 0; // 每个位置的水量，累加到water上去
 		int max = 0; // 每个node在弹出的时候，如果value更大，更新max，否则max的值维持不变
 		while (!heap.isEmpty()) {

@@ -35,8 +35,4 @@ public class Code02_PackingMachine {
 		return ans;
 	}
 
-	public static void main(String[] args) {
-
-	}
-
 }

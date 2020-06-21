@@ -21,21 +21,22 @@ public class Code06_TopKTimes {
 
 		@Override
 		public int compare(Node o1, Node o2) {
-			return o2.times - o1.times;
+			return o1.times - o2.times;
 		}
 
 	}
 
 	public static void printTopKAndRank(String[] arr, int topK) {
-		if (arr == null || arr.length == 0 || topK < 1) {
+		if (arr == null || arr.length == 0 || topK < 1 || topK > arr.length) {
 			return;
 		}
 		HashMap<String, Integer> map = new HashMap<>();
 		for (String str : arr) {
 			if (!map.containsKey(str)) {
-				map.put(str, 0);
+				map.put(str, 1);
+			} else {
+				map.put(str, map.get(str) + 1);
 			}
-			map.put(str, map.get(str) + 1);
 		}
 		topK = Math.min(arr.length, topK);
 		PriorityQueue<Node> heap = new PriorityQueue<>(new NodeComparator());
@@ -46,9 +47,9 @@ public class Code06_TopKTimes {
 			} else {
 				if (heap.peek().times < cur.times) {
 					heap.poll();
+					heap.add(cur);
 				}
 			}
-
 		}
 		while (!heap.isEmpty()) {
 			System.out.println(heap.poll().str);

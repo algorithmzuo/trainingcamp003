@@ -20,7 +20,7 @@ public class Code06_MakeNo {
 		int[] ans = new int[size];
 		int index = 0;
 		for(; index < halfSize;index++) {
-			ans[index] = base[index] * 2 + 1;
+			ans[index] = base[index] * 2 - 1;
 		}
 		for(int i = 0 ;index < size;index++,i++) {
 			ans[index] = base[i] * 2; 

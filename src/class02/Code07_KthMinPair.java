@@ -90,6 +90,7 @@ public class Code07_KthMinPair {
 	}
 
 	// 改写快排，时间复杂度O(N)
+	// 在无序数组arr中，找到，如果排序的话，arr[index]的数是什么？
 	public static int getMinKth(int[] arr, int index) {
 		int L = 0;
 		int R = arr.length - 1;

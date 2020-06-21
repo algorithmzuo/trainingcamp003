@@ -21,6 +21,8 @@ public class Code02_SnacksWays {
 		if (index == arr.length) { // 无零食可选
 			return 1;
 		}
+		// rest >=0
+		// 有零食index
 		// index号零食，要 or 不要
 		// index, rest
 		// (index+1, rest)

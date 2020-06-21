@@ -44,27 +44,28 @@ public class Code05_LCSubstring {
 		return dp;
 	}
 
-	public static String lcst2(String str1, String str2) {
-		if (str1 == null || str2 == null || str1.equals("") || str2.equals("")) {
+	public static String lcst2(String s1, String s2) {
+		if (s1 == null || s2 == null || s1.equals("") || s2.equals("")) {
 			return "";
 		}
-		char[] chs1 = str1.toCharArray();
-		char[] chs2 = str2.toCharArray();
+		char[] str1 = s1.toCharArray();
+		char[] str2 = s2.toCharArray();
 		int row = 0; // 出发点的行号
-		int col = chs2.length - 1; // 出发点的列号
+		int col = str2.length - 1; // 出发点的列号
 		int max = 0;
 		int end = 0;
-		while (row < chs1.length) {
+		while (row < str1.length) {
 			int i = row;
 			int j = col;
 			int len = 0;
 			// 向右下方移动的这一轮
-			while (i < chs1.length && j < chs2.length) {
-				if (chs1[i] != chs2[j]) {
+			while (i < str1.length && j < str2.length) {
+				if (str1[i] != str2[j]) {
 					len = 0;
 				} else {
 					len++;
 				}
+				// len
 				if (len > max) {
 					end = i;
 					max = len;
@@ -78,7 +79,7 @@ public class Code05_LCSubstring {
 				row++;
 			}
 		}
-		return str1.substring(end - max + 1, end + 1);
+		return s1.substring(end - max + 1, end + 1);
 	}
 
 	public static void main(String[] args) {

@@ -33,7 +33,7 @@ public class Code07_TopKTimesRealTime {
 			Node curNode = null;
 			int preIndex = -1; // str之前在堆上的位置
 			// 查词频表，看看有没有关于这个str的记录
-			if (!strNodeMap.containsKey(str)) {
+			if (!strNodeMap.containsKey(str)) { // str之前没进来过
 				curNode = new Node(str, 1);
 				strNodeMap.put(str, curNode);
 				nodeIndexMap.put(curNode, -1);
@@ -42,6 +42,7 @@ public class Code07_TopKTimesRealTime {
 				curNode.times++;
 				preIndex = nodeIndexMap.get(curNode);
 			}
+
 			// 词频表修改完毕，
 			if (preIndex == -1) { // 不在堆上
 				if (heapSize == heap.length) { // 堆满了
