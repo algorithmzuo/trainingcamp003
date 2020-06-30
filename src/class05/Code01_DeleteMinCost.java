@@ -53,6 +53,9 @@ public class Code01_DeleteMinCost {
 	// 然后考察每个子串和s2的编辑距离(假设编辑距离只有删除动作且删除一个字符的代价为1)
 	// 如果s1的长度较小，s2长度较大，这个方法比较合适
 	public static int minCost2(String s1, String s2) {
+		if (s1.length() == 0 || s2.length() == 0) {
+			return s2.length();
+		}
 		int ans = Integer.MAX_VALUE;
 		char[] str2 = s2.toCharArray();
 		for (int start = 0; start < s1.length(); start++) {
@@ -62,7 +65,7 @@ public class Code01_DeleteMinCost {
 				ans = Math.min(ans, distance(str2, s1.substring(start, end).toCharArray()));
 			}
 		}
-		return ans;
+		return ans == Integer.MAX_VALUE ? s2.length() : ans;
 	}
 
 	// 求str2到s1sub的编辑距离
@@ -104,6 +107,9 @@ public class Code01_DeleteMinCost {
 
 	// 解法二的优化
 	public static int minCost3(String s1, String s2) {
+		if (s1.length() == 0 || s2.length() == 0) {
+			return s2.length();
+		}
 		char[] str2 = s2.toCharArray();
 		char[] str1 = s1.toCharArray();
 		int M = str2.length;
@@ -136,58 +142,32 @@ public class Code01_DeleteMinCost {
 		return ans;
 	}
 
-	// 以下的代码仅为了测试使用
-	// 先生成一个随机字符串，比如 123abcd456
-	// 再生根据这个字符串的随机某部分比如abcd，随机添加字符之后生成abckd
-	// 生成的123abcd456和abckd都返回，这个方法就是本题的随机样本发生器
-	public static String[] generateTwoStrings() {
-		int len = (int) (Math.random() * 10) + 5;
-		int adds = (int) (Math.random() * 5);
-		char[] chas = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
-				'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
-				'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y',
-				'Z' };
-		int N = chas.length;
-		char[] str1 = new char[len];
-		for (int i = 0; i < str1.length; i++) {
-			str1[i] = chas[(int) (Math.random() * N)];
+	public static String generateRandomString(int l, int v) {
+		int len = (int) (Math.random() * l);
+		char[] str = new char[len];
+		for (int i = 0; i < len; i++) {
+			str[i] = (char) ('a' + (int) (Math.random() * v));
 		}
-		int a = (int) (Math.random() * (str1.length));
-		int b = (int) (Math.random() * (str1.length));
-		int left = Math.min(a, b);
-		int right = Math.max(a, b) + 1;
-		char[] part = String.valueOf(str1).substring(left, right).toCharArray();
-		char[] str2 = new char[part.length + adds];
-		int count = 0;
-		while (count != adds) {
-			int i = (int) (Math.random() * str2.length);
-			if (str2[i] == 0) {
-				str2[i] = chas[(int) (Math.random() * N)];
-				count++;
-			}
-		}
-		int index = 0;
-		for (int i = 0; i < str2.length; i++) {
-			if (str2[i] == 0) {
-				str2[i] = part[index++];
-			}
-		}
-		return new String[] { String.valueOf(str1), String.valueOf(str2) };
+		return String.valueOf(str);
 	}
 
 	public static void main(String[] args) {
+		int str1Len = 20;
+		int str2Len = 10;
+		int v = 5;
 		int testTime = 100;
 		boolean pass = true;
 		System.out.println("test begin");
 		for (int i = 0; i < testTime; i++) {
-			String[] test = generateTwoStrings();
-			int ans1 = minCost1(test[0], test[1]);
-			int ans2 = minCost2(test[0], test[1]);
-			int ans3 = minCost3(test[0], test[1]);
+			String str1 = generateRandomString(str1Len, v);
+			String str2 = generateRandomString(str2Len, v);
+			int ans1 = minCost1(str1, str2);
+			int ans2 = minCost2(str1, str2);
+			int ans3 = minCost3(str1, str2);
 			if (ans1 != ans2 || ans2 != ans3) {
 				pass = false;
-				System.out.println(test[0]);
-				System.out.println(test[1]);
+				System.out.println(str1);
+				System.out.println(str2);
 				System.out.println(ans1);
 				System.out.println(ans2);
 				System.out.println(ans3);
