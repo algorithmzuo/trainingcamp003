@@ -9,6 +9,7 @@ public class Code01_GetFolderTree {
 		public String path;
 		// key : node下级的路   value：node在key这条路上对应的节点是什么
 		public TreeMap<String, Node> nextMap;
+		
 		public Node(String p) {
 			this.path = p;
 			nextMap = new TreeMap<>();
@@ -63,7 +64,7 @@ public class Code01_GetFolderTree {
 
 	public static void main(String[] args) {
 		
-		//    "a\b\c"
+		//    "a\b\c" '\'  a,b,c
 		String test = "a\\b\\cd";
 		
 		

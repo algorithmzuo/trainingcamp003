@@ -26,7 +26,11 @@ public class Code03_PreAndInArrayToPosArray {
 		return pos;
 	}
 
-	public static void process1(int[] pre, int L1, int R1, int[] in, int L2, int R2, int[] pos, int L3, int R3) {
+	//  L1...R1  L2...R2  L3...R3
+	public static void process1(
+			int[] pre, int L1, int R1, 
+			int[] in, int L2, int R2, 
+			int[] pos, int L3, int R3) {
 		if (L1 > R1) {
 			return;
 		}

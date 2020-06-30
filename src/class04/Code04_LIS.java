@@ -56,7 +56,7 @@ public class Code04_LIS {
 		int[] ends = new int[arr.length];
 		ends[0] = arr[0];
 		dp[0] = 1;
-		int right = 0;
+		int right = 0; // 0....right   right往右无效
 		int l = 0;
 		int r = 0;
 		int m = 0;
@@ -71,6 +71,7 @@ public class Code04_LIS {
 					r = m - 1;
 				}
 			}
+			// l -> right+1
 			right = Math.max(right, l);
 			ends[l] = arr[i];
 			dp[i] = l + 1;

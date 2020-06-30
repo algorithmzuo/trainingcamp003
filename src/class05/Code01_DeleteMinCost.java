@@ -57,6 +57,8 @@ public class Code01_DeleteMinCost {
 		char[] str2 = s2.toCharArray();
 		for (int start = 0; start < s1.length(); start++) {
 			for (int end = start + 1; end <= s1.length(); end++) {
+				// str1[start....end]
+				// substring -> [ 0,1 )
 				ans = Math.min(ans, distance(str2, s1.substring(start, end).toCharArray()));
 			}
 		}
@@ -94,9 +96,44 @@ public class Code01_DeleteMinCost {
 				if (str2[i] == s1sub[j] && dp[i - 1][j - 1] != Integer.MAX_VALUE) {
 					dp[i][j] = Math.min(dp[i][j], dp[i - 1][j - 1]);
 				}
+
 			}
 		}
 		return dp[row - 1][col - 1];
+	}
+
+	// 解法二的优化
+	public static int minCost3(String s1, String s2) {
+		char[] str2 = s2.toCharArray();
+		char[] str1 = s1.toCharArray();
+		int M = str2.length;
+		int N = str1.length;
+		int[][] dp = new int[M][N];
+		int ans = M;
+		for (int start = 0; start < N; start++) {
+			dp[0][start] = str2[0] == str1[start] ? 0 : M;
+			for (int row = 1; row < M; row++) {
+				dp[row][start] = (str2[row] == str1[start] || dp[row - 1][start] != M) ? row : M;
+			}
+			ans = Math.min(ans, dp[M - 1][start]);
+			// 以上把dp[...][start...start]的信息填好了
+			// 以下要把dp[...][start....end]的信息填好
+			for (int end = start + 1; end < N && end - start < M; end++) {
+				int first = end - start;
+				dp[first][end] = (str2[first] == str1[end] && dp[first - 1][end - 1] != M) ? 0 : M;
+				for (int row = first + 1; row < M; row++) {
+					dp[row][end] = M;
+					if (dp[row - 1][end] != M) {
+						dp[row][end] = dp[row - 1][end] + 1;
+					}
+					if (dp[row - 1][end - 1] != M && str2[row] == str1[end]) {
+						dp[row][end] = Math.min(dp[row][end], dp[row - 1][end - 1]);
+					}
+				}
+				ans = Math.min(ans, dp[M - 1][end]);
+			}
+		}
+		return ans;
 	}
 
 	// 以下的代码仅为了测试使用
@@ -104,7 +141,7 @@ public class Code01_DeleteMinCost {
 	// 再生根据这个字符串的随机某部分比如abcd，随机添加字符之后生成abckd
 	// 生成的123abcd456和abckd都返回，这个方法就是本题的随机样本发生器
 	public static String[] generateTwoStrings() {
-		int len = (int) (Math.random() * 20) + 5;
+		int len = (int) (Math.random() * 10) + 5;
 		int adds = (int) (Math.random() * 5);
 		char[] chas = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
 				'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D',
@@ -141,14 +178,19 @@ public class Code01_DeleteMinCost {
 	public static void main(String[] args) {
 		int testTime = 100;
 		boolean pass = true;
+		System.out.println("test begin");
 		for (int i = 0; i < testTime; i++) {
 			String[] test = generateTwoStrings();
-			if (minCost1(test[0], test[1]) != minCost2(test[0], test[1])) {
+			int ans1 = minCost1(test[0], test[1]);
+			int ans2 = minCost2(test[0], test[1]);
+			int ans3 = minCost3(test[0], test[1]);
+			if (ans1 != ans2 || ans2 != ans3) {
 				pass = false;
 				System.out.println(test[0]);
 				System.out.println(test[1]);
-				System.out.println(minCost1(test[0], test[1]));
-				System.out.println(minCost2(test[0], test[1]));
+				System.out.println(ans1);
+				System.out.println(ans2);
+				System.out.println(ans3);
 				break;
 			}
 		}
