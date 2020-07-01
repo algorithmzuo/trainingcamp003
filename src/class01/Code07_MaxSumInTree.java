@@ -1,8 +1,5 @@
 package class01;
 
-import java.util.HashMap;
-import java.util.Stack;
-
 public class Code07_MaxSumInTree {
 
 	public static class Node {
