@@ -116,17 +116,20 @@ public class Code01_DeleteMinCost {
 		int N = str1.length;
 		int[][] dp = new int[M][N];
 		int ans = M;
-		for (int start = 0; start < N; start++) {
+		for (int start = 0; start < N; start++) { // 开始的列数
 			dp[0][start] = str2[0] == str1[start] ? 0 : M;
 			for (int row = 1; row < M; row++) {
-				dp[row][start] = (str2[row] == str1[start] || dp[row - 1][start] != M) ? row : M;
+				dp[row][start] = (str2[row] == str1[start] 
+						|| dp[row - 1][start] != M) ? row : M;
 			}
 			ans = Math.min(ans, dp[M - 1][start]);
-			// 以上把dp[...][start...start]的信息填好了
-			// 以下要把dp[...][start....end]的信息填好
+			// 以上已经把start列，填好
+			// 以下要把dp[...][start+1....N-1]的信息填好
+			// start...end  end - start +2
 			for (int end = start + 1; end < N && end - start < M; end++) {
+				// 0... first-1  行   不用管
 				int first = end - start;
-				dp[first][end] = (str2[first] == str1[end] && dp[first - 1][end - 1] != M) ? 0 : M;
+				dp[first][end] = (str2[first] == str1[end] && dp[first - 1][end - 1] == 0) ? 0 : M;
 				for (int row = first + 1; row < M; row++) {
 					dp[row][end] = M;
 					if (dp[row - 1][end] != M) {
@@ -155,7 +158,7 @@ public class Code01_DeleteMinCost {
 		int str1Len = 20;
 		int str2Len = 10;
 		int v = 5;
-		int testTime = 100;
+		int testTime = 10000;
 		boolean pass = true;
 		System.out.println("test begin");
 		for (int i = 0; i < testTime; i++) {

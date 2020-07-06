@@ -19,7 +19,8 @@ public class Code05_RemoveDuplicateLettersLessLexi {
 				minACSIndex = str.charAt(minACSIndex) > str.charAt(i) ? i : minACSIndex;
 			}
 		}
-		return String.valueOf(str.charAt(minACSIndex)) + 
+		return String.valueOf(
+				str.charAt(minACSIndex)) + 
 				remove (   
 						str
 						.substring(minACSIndex+1)

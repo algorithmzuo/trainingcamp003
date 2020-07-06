@@ -77,8 +77,10 @@ public class Code04_LargestComponentSizebyCommonFactor {
 	public static int largestComponentSize2(int[] arr) {
 		UnionFindSet2 unionFind = new UnionFindSet2(arr.length);
 		// key 是某一个因子，
-		// value 是包含key因子的，其中一个数的位置
+		// value 是包含key因子的，其中一个位置
 		HashMap<Integer, Integer> fatorsMap = new HashMap<>();
+		
+		
 		for (int i = 0; i < arr.length; i++) {
 			int num = arr[i];
 			int limit = (int) Math.sqrt(num); // 1 ~ 根号num

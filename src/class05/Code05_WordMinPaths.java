@@ -10,14 +10,20 @@ import java.util.Set;
 
 public class Code05_WordMinPaths {
 
-	public static List<List<String>> findMinPaths(String start, String to,
+	public static List<List<String>> findMinPaths(
+			String start, 
+			String end,
 			List<String> list) {
 		list.add(start);
 		HashMap<String, ArrayList<String>> nexts = getNexts(list);
 		HashMap<String, Integer> distances = getDistances(start, nexts);
+		
+		
+		
+		
 		LinkedList<String> pathList = new LinkedList<>();
 		List<List<String>> res = new ArrayList<>();
-		getShortestPaths(start, to, nexts, distances, pathList, res);
+		getShortestPaths(start, end, nexts, distances, pathList, res);
 		return res;
 	}
 
@@ -69,9 +75,17 @@ public class Code05_WordMinPaths {
 		return distances;
 	}
 
-	private static void getShortestPaths(String cur, String to,
+	// 现在来到了什么：cur
+	// 目的地：end
+	// 邻居表：nexts
+	// 最短距离表：distances
+	// 沿途走过的路径：path上{....}
+	// 答案往res里放，收集所有的最短路径
+	private static void getShortestPaths(
+			String cur, String to,
 			HashMap<String, ArrayList<String>> nexts,
-			HashMap<String, Integer> distances, LinkedList<String> path,
+			HashMap<String, Integer> distances,
+			LinkedList<String> path,
 			List<List<String>> res) {
 		path.add(cur);
 		if (to.equals(cur)) {

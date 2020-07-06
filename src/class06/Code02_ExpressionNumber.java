@@ -30,11 +30,11 @@ public class Code02_ExpressionNumber {
 		return f(exp, desired, 0, exp.length - 1);
 	}
 
-	// exp[L..R] 返回期待为desired的方法数
+	// str[L..R] 返回期待为desired的方法数
 	// 潜台词：L R 必须是偶数位置
-	public static int f(char[] exp, boolean desired, int L, int R) {
+	public static int f(char[] str, boolean desired, int L, int R) {
 		if (L == R) { // base case 1
-			if (exp[L] == '1') {
+			if (str[L] == '1') {
 				return desired ? 1 : 0;
 			} else { // '0'
 				return desired ? 0 : 1;
@@ -47,35 +47,35 @@ public class Code02_ExpressionNumber {
 			// i位置尝试L..R范围上的每一个逻辑符号，都是最后结合的
 			for (int i = L + 1; i < R; i += 2) {
 				// exp[i] 一定压中逻辑符号
-				switch (exp[i]) {
+				switch (str[i]) {
 				case '&':
-					res += f(exp, true, L, i - 1) * f(exp, true, i + 1, R);
+					res += f(str, true, L, i - 1) * f(str, true, i + 1, R);
 					break;
 				case '|':
-					res += f(exp, true, L, i - 1) * f(exp, false, i + 1, R);
-					res += f(exp, false, L, i - 1) * f(exp, true, i + 1, R);
-					res += f(exp, true, L, i - 1) * f(exp, true, i + 1, R);
+					res += f(str, true, L, i - 1) * f(str, false, i + 1, R);
+					res += f(str, false, L, i - 1) * f(str, true, i + 1, R);
+					res += f(str, true, L, i - 1) * f(str, true, i + 1, R);
 					break;
 				case '^':
-					res += f(exp, true, L, i - 1) * f(exp, false, i + 1, R);
-					res += f(exp, false, L, i - 1) * f(exp, true, i + 1, R);
+					res += f(str, true, L, i - 1) * f(str, false, i + 1, R);
+					res += f(str, false, L, i - 1) * f(str, true, i + 1, R);
 					break;
 				}
 			}
 		} else { // 期待为false
 			for (int i = L + 1; i < R; i += 2) {
-				switch (exp[i]) {
+				switch (str[i]) {
 				case '&':
-					res += f(exp, false, L, i - 1) * f(exp, true, i + 1, R);
-					res += f(exp, true, L, i - 1) * f(exp, false, i + 1, R);
-					res += f(exp, false, L, i - 1) * f(exp, false, i + 1, R);
+					res += f(str, false, L, i - 1) * f(str, true, i + 1, R);
+					res += f(str, true, L, i - 1) * f(str, false, i + 1, R);
+					res += f(str, false, L, i - 1) * f(str, false, i + 1, R);
 					break;
 				case '|':
-					res += f(exp, false, L, i - 1) * f(exp, false, i + 1, R);
+					res += f(str, false, L, i - 1) * f(str, false, i + 1, R);
 					break;
 				case '^':
-					res += f(exp, true, L, i - 1) * f(exp, true, i + 1, R);
-					res += f(exp, false, L, i - 1) * f(exp, false, i + 1, R);
+					res += f(str, true, L, i - 1) * f(str, true, i + 1, R);
+					res += f(str, false, L, i - 1) * f(str, false, i + 1, R);
 					break;
 				}
 			}

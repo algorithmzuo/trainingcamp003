@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 public class Code04_LeastRecentlyUsedCache {
 
-	// 
 	public static class Node<K, V> {
 		public K key;
 		public V value;
@@ -64,6 +63,7 @@ public class Code04_LeastRecentlyUsedCache {
 			this.tail = node;
 		}
 
+		// 把头节点删掉并返回
 		public Node<K, V> removeHead() {
 			if (this.head == null) {
 				return null;
@@ -111,12 +111,12 @@ public class Code04_LeastRecentlyUsedCache {
 				node.value = value;
 				nodeList.moveNodeToTail(node);
 			} else { // 这是一个新加的记录，有可能出现替换
+				if (keyNodeMap.size() == capacity) {
+					removeMostUnusedCache();
+				}
 				Node<K, V> newNode = new Node<K, V>(key, value);
 				keyNodeMap.put(key, newNode);
 				nodeList.addNode(newNode);
-				if (keyNodeMap.size() == capacity + 1) {
-					removeMostUnusedCache();
-				}
 			}
 		}
 

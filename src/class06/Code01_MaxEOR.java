@@ -2,10 +2,13 @@ package class06;
 
 public class Code01_MaxEOR {
 
+	// O(N^2)
 	public static int maxXorSubarray1(int[] arr) {
 		if (arr == null || arr.length == 0) {
 			return 0;
 		}
+		// 准备一个前缀异或和数组eor
+		// eor[i] = arr[0...i]的异或结果
 		int[] eor = new int[arr.length];
 		eor[0] = arr[0];
 		// 生成eor数组，eor[i]代表arr[0..i]的异或和
@@ -13,7 +16,7 @@ public class Code01_MaxEOR {
 			eor[i] = eor[i - 1] ^ arr[i];
 		}
 		int max = Integer.MIN_VALUE;
-		for (int j = 0; j < arr.length; j++) { // 以j位置结尾的情况下，每一个子数组最大的异或和
+		for (int j = 0; j < arr.length; j++) {
 			for (int i = 0; i <= j; i++) { // 依次尝试arr[0..j]、arr[1..j]..arr[i..j]..arr[j..j]
 				max = Math.max(max, i == 0 ? eor[j] : eor[j] ^ eor[i - 1]);
 			}
@@ -44,24 +47,23 @@ public class Code01_MaxEOR {
 				// path(int) = 1
 				int path = ((newNum >> move) & 1);
 				// 无路新建、有路复用
-				cur.nexts[path] = 
-						cur.nexts[path] == null ? new Node() : cur.nexts[path];
+				cur.nexts[path] = cur.nexts[path] == null ? new Node() : cur.nexts[path];
 				cur = cur.nexts[path];
 			}
 		}
 
 		// 该结构之前收集了一票数字，并且建好了前缀树
-		// eori,和 ？ ^  最大的结果（返回）
-		public int maxXor(int eori) {
+		// sum,和 谁 ^ 最大的结果（把结果返回）
+		public int maxXor(int sum) {
 			Node cur = head;
 			int res = 0;
 			for (int move = 31; move >= 0; move--) {
-				int path = (eori >> move) & 1;
+				int path = (sum >> move) & 1;
 				// 期待的路
 				int best = move == 31 ? path : (path ^ 1);
 				// 实际走的路
 				best = cur.nexts[best] != null ? best : (best ^ 1);
-				// (path ^ best)  当前位位异或完的结果
+				// (path ^ best) 当前位位异或完的结果
 				res |= (path ^ best) << move;
 				cur = cur.nexts[best];
 			}
@@ -91,8 +93,7 @@ public class Code01_MaxEOR {
 	public static int[] generateRandomArray(int maxSize, int maxValue) {
 		int[] arr = new int[(int) ((maxSize + 1) * Math.random())];
 		for (int i = 0; i < arr.length; i++) {
-			arr[i] = (int) ((maxValue + 1) * Math.random())
-					- (int) (maxValue * Math.random());
+			arr[i] = (int) ((maxValue + 1) * Math.random()) - (int) (maxValue * Math.random());
 		}
 		return arr;
 	}

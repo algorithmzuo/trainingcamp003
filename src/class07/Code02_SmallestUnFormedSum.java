@@ -69,6 +69,7 @@ public class Code02_SmallestUnFormedSum {
 		}
 		Arrays.sort(arr); // O (N * logN)
 		int range = 1;
+		// arr[0] == 1
 		for (int i = 1; i != arr.length; i++) {
 			if (arr[i] > range + 1) {
 				return range + 1;

@@ -1,27 +1,30 @@
 package class07;
 
+import java.util.Arrays;
+
 public class Code03_MinPatches {
 
 	// arr请保证有序，且正数
-	public static int minPatches(int[] arr, int K) {
+	public static int minPatches(int[] arr, int aim) {
 		int patches = 0; // 缺多少个数字
 		long range = 0; // 已经完成了1 ~ range的目标
+		Arrays.sort(arr);
 		for (int i = 0; i != arr.length; i++) {
 			// 1~range
 			// 1 ~ arr[i]-1
-			while (arr[i] > range + 1) { // arr[i] 1 ~ arr[i]-1
+			while (arr[i] - 1 > range) { // arr[i] 1 ~ arr[i]-1
 				range += range + 1; // range + 1 是缺的数字
 				patches++;
-				if (range >= K) {
+				if (range >= aim) {
 					return patches;
 				}
 			}
 			range += arr[i];
-			if (range >= K) {
+			if (range >= aim) {
 				return patches;
 			}
 		}
-		while (K >= range + 1) {
+		while (aim >= range + 1) {
 			range += range + 1;
 			patches++;
 		}

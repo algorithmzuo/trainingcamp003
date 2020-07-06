@@ -4,19 +4,23 @@ public class Code04_MoneyProblem {
 
 	// int[] d d[i]：i号怪兽的武力
 	// int[] p p[i]：i号怪兽要求的钱
-	// hp 当前你所具有的能力
+	// ability 当前你所具有的能力
 	// index 来到了第index个怪兽的面前
 
-	// 目前，你的能力是hp，你来到了index号怪兽的面前，如果要通过后续所有的怪兽，
+	// 目前，你的能力是ability，你来到了index号怪兽的面前，如果要通过后续所有的怪兽，
 	// 请返回需要花的最少钱数
-	public static long process(int[] d, int[] p, int hp, int index) {
+	public static long process(int[] d, int[] p, int ability, int index) {
 		if (index == d.length) {
 			return 0;
 		}
-		if (hp < d[index]) {
-			return p[index] + process(d, p, hp + d[index], index + 1);
+		if (ability < d[index]) {
+			return p[index] + process(d, p, ability + d[index], index + 1);
 		} else { // 可以贿赂，也可以不贿赂
-			return Math.min(p[index] + process(d, p, hp + d[index], index + 1), process(d, p, hp, index + 1));
+			return 
+					Math.min(
+							p[index] + process(d, p, ability + d[index], index + 1),
+						    process(d, p, ability, index + 1)
+							);
 		}
 	}
 
