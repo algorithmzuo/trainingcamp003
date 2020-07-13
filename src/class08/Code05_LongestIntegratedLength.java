@@ -43,11 +43,12 @@ public class Code05_LongestIntegratedLength {
 		int min = 0;
 		HashSet<Integer> set = new HashSet<Integer>();
 		for (int L = 0; L < arr.length; L++) { // L 左边界
+			// L .......
 			set.clear();
 			max = Integer.MIN_VALUE;
 			min = Integer.MAX_VALUE;
 			for (int R = L; R < arr.length; R++) { // R 右边界
-				// arr[L..R]这个子数组在验证
+				// arr[L..R]这个子数组在验证   l...R L...r+1  l...r+2  
 				if (set.contains(arr[R])) {
 					// arr[L..R]上开始 出现重复值了，arr[L..R往后]不需要验证了，
 					// 一定不是可整合的
