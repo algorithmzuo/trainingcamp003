@@ -2,6 +2,7 @@ package class05;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class Code01_DeleteMinCost {
@@ -119,15 +120,14 @@ public class Code01_DeleteMinCost {
 		for (int start = 0; start < N; start++) { // 开始的列数
 			dp[0][start] = str2[0] == str1[start] ? 0 : M;
 			for (int row = 1; row < M; row++) {
-				dp[row][start] = (str2[row] == str1[start] 
-						|| dp[row - 1][start] != M) ? row : M;
+				dp[row][start] = (str2[row] == str1[start] || dp[row - 1][start] != M) ? row : M;
 			}
 			ans = Math.min(ans, dp[M - 1][start]);
 			// 以上已经把start列，填好
 			// 以下要把dp[...][start+1....N-1]的信息填好
-			// start...end  end - start +2
+			// start...end end - start +2
 			for (int end = start + 1; end < N && end - start < M; end++) {
-				// 0... first-1  行   不用管
+				// 0... first-1 行 不用管
 				int first = end - start;
 				dp[first][end] = (str2[first] == str1[end] && dp[first - 1][end - 1] == 0) ? 0 : M;
 				for (int row = first + 1; row < M; row++) {
@@ -143,6 +143,41 @@ public class Code01_DeleteMinCost {
 			}
 		}
 		return ans;
+	}
+
+	// 来自学生的做法，时间复杂度O(N * M平方)
+	// 复杂度和方法三一样，但是思路截然不同
+	public static int minCost4(String s1, String s2) {
+		char[] str1 = s1.toCharArray();
+		char[] str2 = s2.toCharArray();
+		HashMap<Character, ArrayList<Integer>> map1 = new HashMap<>();
+		for (int i = 0; i < str1.length; i++) {
+			ArrayList<Integer> list = map1.getOrDefault(str1[i], new ArrayList<Integer>());
+			list.add(i);
+			map1.put(str1[i], list);
+		}
+		int ans = 0;
+		// 假设删除后的str2必以i位置开头
+		// 那么查找i位置在str1上一共有几个，并对str1上的每个位置开始遍历
+		// 再次遍历str2一次，看存在对应str1中i后续连续子串可容纳的最长长度
+		for (int i = 0; i < str2.length; i++) {
+			if (map1.containsKey(str2[i])) {
+				ArrayList<Integer> keyList = map1.get(str2[i]);
+				for (int j = 0; j < keyList.size(); j++) {
+					int cur1 = keyList.get(j) + 1;
+					int cur2 = i + 1;
+					int count = 1;
+					for (int k = cur2; k < str2.length && cur1 < str1.length; k++) {
+						if (str2[k] == str1[cur1]) {
+							cur1++;
+							count++;
+						}
+					}
+					ans = Math.max(ans, count);
+				}
+			}
+		}
+		return s2.length() - ans;
 	}
 
 	public static String generateRandomString(int l, int v) {
@@ -167,13 +202,15 @@ public class Code01_DeleteMinCost {
 			int ans1 = minCost1(str1, str2);
 			int ans2 = minCost2(str1, str2);
 			int ans3 = minCost3(str1, str2);
-			if (ans1 != ans2 || ans2 != ans3) {
+			int ans4 = minCost4(str1, str2);
+			if (ans1 != ans2 || ans3 != ans4 || ans1 != ans3) {
 				pass = false;
 				System.out.println(str1);
 				System.out.println(str2);
 				System.out.println(ans1);
 				System.out.println(ans2);
 				System.out.println(ans3);
+				System.out.println(ans4);
 				break;
 			}
 		}
