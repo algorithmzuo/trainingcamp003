@@ -3,38 +3,26 @@ package class07;
 public class Code05_RemoveDuplicateLettersLessLexi {
 
 	// 在str中，每种字符都要保留一个，让最后的结果，字典序最小 ，并返回
-	public static String remove(String str) {
-		if(str == null || str.length() < 2) {
+	public static String removeDuplicateLetters1(String str) {
+		if (str == null || str.length() < 2) {
 			return str;
 		}
 		int[] map = new int[256];
-		for(int  i = 0;i< str.length();i++) {
+		for (int i = 0; i < str.length(); i++) {
 			map[str.charAt(i)]++;
 		}
 		int minACSIndex = 0;
-		for(int i = 0 ; i < str.length();i++) {
-			if(--map[str.charAt(i)] == 0) {
+		for (int i = 0; i < str.length(); i++) {
+			minACSIndex = str.charAt(minACSIndex) > str.charAt(i) ? i : minACSIndex;
+			if (--map[str.charAt(i)] == 0) {
 				break;
-			}else {
-				minACSIndex = str.charAt(minACSIndex) > str.charAt(i) ? i : minACSIndex;
 			}
 		}
-		return String.valueOf(
-				str.charAt(minACSIndex)) + 
-				remove (   
-						str
-						.substring(minACSIndex+1)
-						.replaceAll(String.valueOf(str.charAt(minACSIndex)), "")   
-						)
-				;
+		return String.valueOf(str.charAt(minACSIndex)) + removeDuplicateLetters1(
+				str.substring(minACSIndex + 1).replaceAll(String.valueOf(str.charAt(minACSIndex)), ""));
 	}
-	
-	
-	
-	
-	
-	
-	public static String removeDuplicateLetters(String s) {
+
+	public static String removeDuplicateLetters2(String s) {
 		char[] str = s.toCharArray();
 		// 小写字母ascii码值范围[97~122]，所以用长度为26的数组做次数统计
 		// 如果map[i] > -1，则代表ascii码值为i的字符的出现次数
