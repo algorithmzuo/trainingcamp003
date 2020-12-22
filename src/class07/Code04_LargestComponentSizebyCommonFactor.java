@@ -1,15 +1,17 @@
 package class07;
 
 import java.util.HashMap;
-import java.util.Stack;
 
+// 本题为leetcode原题
+// 测试链接：https://leetcode.com/problems/largest-component-size-by-common-factor/
+// 方法1会超时，但是方法2直接通过
 public class Code04_LargestComponentSizebyCommonFactor {
 
-	// arr中没有小于1的数
-	public static int largestComponentSize(int[] arr) {
-		UnionFindSet1 set = new UnionFindSet1(arr.length);
-		for (int i = 0; i < arr.length; i++) {
-			for (int j = i + 1; j < arr.length; j++) {
+	public static int largestComponentSize1(int[] arr) {
+		int N = arr.length;
+		UnionFind set = new UnionFind(N);
+		for (int i = 0; i < N; i++) {
+			for (int j = i + 1; j < N; j++) {
 				if (gcd(arr[i], arr[j]) != 1) {
 					set.union(i, j);
 				}
@@ -18,84 +20,24 @@ public class Code04_LargestComponentSizebyCommonFactor {
 		return set.maxSize();
 	}
 
-	public static int gcd(int m, int n) {
-		return n == 0 ? m : gcd(n, m % n);
-	}
-
-	public static class UnionFindSet1 {
-		public HashMap<Integer, Integer> fatherMap; // key 的父亲 value
-		// key是代表点的时候，才有记录，value是所在集合一共有多少点
-		public HashMap<Integer, Integer> sizeMap;
-
-		public UnionFindSet1(int size) {
-			fatherMap = new HashMap<>();
-			sizeMap = new HashMap<>();
-			for (int i = 0; i < size; i++) {
-				fatherMap.put(i, i);
-				sizeMap.put(i, 1);
-			}
-		}
-
-		public int size() {
-			return sizeMap.size();
-		}
-
-		public int maxSize() {
-			int ans = 0;
-			for (int size : sizeMap.values()) {
-				ans = Math.max(ans, size);
-			}
-			return ans;
-		}
-
-		private int findHead(int element) {
-			Stack<Integer> path = new Stack<>();
-			while (element != fatherMap.get(element)) {
-				path.push(element);
-				element = fatherMap.get(element);
-			}
-			while (!path.isEmpty()) {
-				fatherMap.put(path.pop(), element);
-			}
-			return element;
-		}
-
-		public void union(int a, int b) {
-			int aF = findHead(a);
-			int bF = findHead(b);
-			if (aF != bF) {
-				int big = sizeMap.get(aF) >= sizeMap.get(bF) ? aF : bF;
-				int small = big == aF ? bF : aF;
-				fatherMap.put(small, big);
-				sizeMap.put(big, sizeMap.get(aF) + sizeMap.get(bF));
-				sizeMap.remove(small);
-			}
-
-		}
-	}
-
 	public static int largestComponentSize2(int[] arr) {
-		UnionFindSet2 unionFind = new UnionFindSet2(arr.length);
-		// key 是某一个因子，
-		// value 是包含key因子的，其中一个位置
+		int N = arr.length;
+		UnionFind unionFind = new UnionFind(N);
 		HashMap<Integer, Integer> fatorsMap = new HashMap<>();
-		
-		
-		for (int i = 0; i < arr.length; i++) {
+		for (int i = 0; i < N; i++) {
 			int num = arr[i];
-			int limit = (int) Math.sqrt(num); // 1 ~ 根号num
-			for (int j = 1; j <= limit; j++) { // j是现在试的因子
-				if (num % j == 0) { // num含有j的因子
-					if (j != 1) { // 这个因子不是1
-						// j
-						if (!fatorsMap.containsKey(j)) { // 当前数是含有j因子的第一个数
+			int limit = (int) Math.sqrt(num);
+			for (int j = 1; j <= limit; j++) {
+				if (num % j == 0) {
+					if (j != 1) {
+						if (!fatorsMap.containsKey(j)) {
 							fatorsMap.put(j, i);
 						} else {
 							unionFind.union(fatorsMap.get(j), i);
 						}
 					}
-					int other = num / j; // other * j == num
-					if (other != 1) { // num含有other的因子
+					int other = num / j;
+					if (other != 1) {
 						if (!fatorsMap.containsKey(other)) {
 							fatorsMap.put(other, i);
 						} else {
@@ -108,25 +50,23 @@ public class Code04_LargestComponentSizebyCommonFactor {
 		return unionFind.maxSize();
 	}
 
-	public static class UnionFindSet2 {
-		private int[] parents; // parents[i] = j arr[i]的父亲是arr[j]
-		private int[] sizes; // sizes[i] = X arr[i]所在的集合大小为X
+	public static int gcd(int m, int n) {
+		return n == 0 ? m : gcd(n, m % n);
+	}
 
-		public UnionFindSet2(int len) {
-			parents = new int[len];
-			sizes = new int[len];
-			for (int i = 0; i < len; i++) {
+	public static class UnionFind {
+		private int[] parents;
+		private int[] sizes;
+		private int[] help;
+
+		public UnionFind(int N) {
+			parents = new int[N];
+			sizes = new int[N];
+			help = new int[N];
+			for (int i = 0; i < N; i++) {
 				parents[i] = i;
 				sizes[i] = 1;
 			}
-		}
-
-		public int size() {
-			int ans = 0;
-			for (int i = 0; i < sizes.length; i++) {
-				ans += sizes[i] != 0 ? 1 : 0;
-			}
-			return ans;
 		}
 
 		public int maxSize() {
@@ -137,35 +77,28 @@ public class Code04_LargestComponentSizebyCommonFactor {
 			return ans;
 		}
 
-		private int findHead(int element) {
-			Stack<Integer> path = new Stack<>();
-			while (element != parents[element]) {
-				path.push(element);
-				element = parents[element];
+		private int find(int i) {
+			int hi = 0;
+			while (i != parents[i]) {
+				help[hi++] = i;
+				i = parents[i];
 			}
-			while (!path.isEmpty()) {
-				parents[path.pop()] = element;
+			for (hi--; hi >= 0; hi--) {
+				parents[help[hi]] = i;
 			}
-			return element;
+			return i;
 		}
 
-		// a 和 b 分别是两个数的位置，不是值
-		public void union(int a, int b) {
-			int aF = findHead(a);
-			int bF = findHead(b);
-			if (aF != bF) {
-				int big = sizes[aF] >= sizes[bF] ? aF : bF;
-				int small = big == aF ? bF : aF;
+		public void union(int i, int j) {
+			int f1 = find(i);
+			int f2 = find(j);
+			if (f1 != f2) {
+				int big = sizes[f1] >= sizes[f2] ? f1 : f1;
+				int small = big == f1 ? f2 : f1;
 				parents[small] = big;
-				sizes[big] = sizes[aF] + sizes[bF];
-				sizes[small] = 0;
+				sizes[big] = sizes[f1] + sizes[f2];
 			}
 		}
-	}
-
-	public static void main(String[] args) {
-		int[] test = { 2, 3, 6, 7, 4, 12, 21, 39 };
-		System.out.println(largestComponentSize2(test));
 	}
 
 }
