@@ -5,6 +5,9 @@ import java.util.HashMap;
 public class Code02_MostEOR {
 
 	public static int mostEOR(int[] arr) {
+		if (arr == null || arr.length == 0) {
+			return 0;
+		}
 		int N = arr.length;
 		int[] dp = new int[N]; // dp[i] = 0
 		HashMap<Integer, Integer> map = new HashMap<>();
