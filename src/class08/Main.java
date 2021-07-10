@@ -27,20 +27,8 @@ public class Main {
 	public static final long mod = 1000000007;
 
 	public static int moneyWays(int[] arbitrary, int[] onlyone, int money) {
-		if (money < 0) {
-			return 0;
-		}
-		if ((arbitrary == null || arbitrary.length == 0) && (onlyone == null || onlyone.length == 0)) {
-			return money == 0 ? 1 : 0;
-		}
 		long[][] dparb = getDpArb(arbitrary, money);
 		long[][] dpone = getDpOne(onlyone, money);
-		if (dparb == null) {
-			return (int) dpone[dpone.length - 1][money];
-		}
-		if (dpone == null) {
-			return (int) dparb[dparb.length - 1][money];
-		}
 		long res = 0;
 		for (int i = 0; i <= money; i++) {
 			res += dparb[dparb.length - 1][i] * dpone[dpone.length - 1][money - i] % mod;
@@ -50,9 +38,6 @@ public class Main {
 	}
 
 	public static long[][] getDpArb(int[] arr, int money) {
-		if (arr == null || arr.length == 0) {
-			return null;
-		}
 		long[][] dp = new long[arr.length][money + 1];
 		for (int i = 0; i < arr.length; i++) {
 			dp[i][0] = 1;
@@ -71,9 +56,6 @@ public class Main {
 	}
 
 	public static long[][] getDpOne(int[] arr, int money) {
-		if (arr == null || arr.length == 0) {
-			return null;
-		}
 		long[][] dp = new long[arr.length][money + 1];
 		for (int i = 0; i < arr.length; i++) {
 			dp[i][0] = 1;
