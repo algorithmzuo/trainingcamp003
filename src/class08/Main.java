@@ -31,8 +31,7 @@ public class Main {
 		long[][] dpone = getDpOne(onlyone, money);
 		long res = 0;
 		for (int i = 0; i <= money; i++) {
-			res += dparb[dparb.length - 1][i] * dpone[dpone.length - 1][money - i] % mod;
-			res %= mod;
+			res = (res + dparb[dparb.length - 1][i] * dpone[dpone.length - 1][money - i]) % mod;
 		}
 		return (int) res;
 	}
@@ -47,9 +46,7 @@ public class Main {
 		}
 		for (int i = 1; i < arr.length; i++) {
 			for (int j = 1; j <= money; j++) {
-				dp[i][j] = dp[i - 1][j];
-				dp[i][j] += j - arr[i] >= 0 ? dp[i][j - arr[i]] : 0;
-				dp[i][j] %= mod;
+				dp[i][j] = (dp[i - 1][j] + (j - arr[i] >= 0 ? dp[i][j - arr[i]] : 0)) % mod;
 			}
 		}
 		return dp;
@@ -65,9 +62,7 @@ public class Main {
 		}
 		for (int i = 1; i < arr.length; i++) {
 			for (int j = 1; j <= money; j++) {
-				dp[i][j] = dp[i - 1][j];
-				dp[i][j] += j - arr[i] >= 0 ? dp[i - 1][j - arr[i]] : 0;
-				dp[i][j] %= mod;
+				dp[i][j] = (dp[i - 1][j] + (j - arr[i] >= 0 ? dp[i - 1][j - arr[i]] : 0)) % mod;
 			}
 		}
 		return dp;
